@@ -34,3 +34,5 @@ Se utilizarán issues de github tanto para los bugs que se encuentren como para 
 
 Es muy importante que se creen issues siempre que aparezca una idea o bug, aunque su autor piense trabajar en ella directamente (para eso puede asignarse la issue a sí mismo). Así todos los desarrolladores pueden comprobar fácilmente el estado del proyecto y encontrar tareas en las que trabajar.
 
+Cuando se trabaje en una issue, los commits deberán hacer referencia a la misma mediante el código de issue. Por ejemplo "Implementado cliente REST #7" hace referencia a la issue #7, y "Arreglado bug en la votación fixes #14" cerrará la issue al hacer commit ([Closing issues using keywords](https://help.github.com/articles/closing-issues-using-keywords/)). Esto ayuda a los demás desarrolladores a ver el progreso de la issue.
+
