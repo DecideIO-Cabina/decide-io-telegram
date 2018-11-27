@@ -36,3 +36,11 @@ Es muy importante que se creen issues siempre que aparezca una idea o bug, aunqu
 
 Cuando se trabaje en una issue, los commits deberán hacer referencia a la misma mediante el código de issue. Por ejemplo "Implementado cliente REST #7" hace referencia a la issue #7, y "Arreglado bug en la votación fixes #14" cerrará la issue al hacer commit ([Closing issues using keywords](https://help.github.com/articles/closing-issues-using-keywords/)). Esto ayuda a los demás desarrolladores a ver el progreso de la issue.
 
+## Numeración de las versiones
+Los cambios que pasen a la rama master causarán un aumento en el número de versión del proyecto. El formato de la versión será **vX.Y.Z** donde:
+* X pasará a 1 cuando se considere que la aplicación está preparada para usuarios externos (puede pasar a producción), y aumentará si se hacen grandes cambios o refactorizaciones, que no se esperan en el contexto de la asignatura.
+* Y aumentará cuando se introduzcan nuevas funcionalidades.
+* Z aumentará con el resto de cambios que se introduzan en master, como pequeños arreglos y mejoras.
+
+Basado en [semver](https://semver.org/)
+
