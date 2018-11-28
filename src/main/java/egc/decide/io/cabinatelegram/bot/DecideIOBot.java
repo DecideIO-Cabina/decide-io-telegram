@@ -1,6 +1,7 @@
 package egc.decide.io.cabinatelegram.bot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -13,6 +14,7 @@ import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
 
 @CommonsLog
+@Component
 public class DecideIOBot extends TelegramLongPollingBot {
 
 	@Autowired
