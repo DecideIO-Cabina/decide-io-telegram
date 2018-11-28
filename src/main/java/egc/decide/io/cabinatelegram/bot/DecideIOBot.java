@@ -1,28 +1,58 @@
 package egc.decide.io.cabinatelegram.bot;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import egc.decide.io.cabinatelegram.bot.actions.DecideBotException;
+import egc.decide.io.cabinatelegram.bot.actions.StartAction;
+import lombok.SneakyThrows;
+import lombok.extern.apachecommons.CommonsLog;
+
+@CommonsLog
 public class DecideIOBot extends TelegramLongPollingBot {
-	
-	
+
+	@Autowired
+	StartAction startAction;
 
 	@Override
+	@SneakyThrows
 	public void onUpdateReceived(Update update) {
-		System.out.println("Recibido mensaje de "+update.getMessage().getFrom().getFirstName()+" ("+update.getMessage().getFrom().getUserName()+")");
-		System.out.println(update.getMessage().getText());
+		log.debug("Recibido mensaje de " + update.getMessage().getFrom().getFirstName() + " ("
+				+ update.getMessage().getFrom().getUserName() + ")");
+		log.debug(update.getMessage().getText());
+
 		if (update.hasMessage() && update.getMessage().hasText()) {
-			
-			SendMessage message = new SendMessage() // Create a SendMessage object with mandatory fields
-					.setChatId(update.getMessage().getChatId()).setText("Hola amigos de EGC");
+
 			try {
-				execute(message); // Call method to send the message
+				execute(act(update));
 			} catch (TelegramApiException e) {
-				e.printStackTrace();
+				log.error("Se ha producido un error respondiendo a " + update.getMessage().getText(), e);
+			} catch (DecideBotException e) {
+				execute(new SendMessage().setChatId(update.getMessage().getChatId())
+						.setText(e.getMessage()));
 			}
+
 		}
+	}
+
+	private BotApiMethod<?> act(Update update) throws DecideBotException {
+		BotApiMethod<?> result = null;
+
+		switch (update.getMessage().getText()) {
+
+		case "/start":
+			result = startAction.act(update);
+			break;
+
+		default:
+			throw new DecideBotException("Lo siento, no te he entendido. Prueba con /start");
+		}
+
+		return result;
 	}
 
 	@Override
