@@ -1,4 +1,4 @@
-# decide-io-telegram
+# decide-io-telegram [![Build Status](https://travis-ci.com/DecideIO-Cabina/decide-io-telegram.svg?branch=master)](https://travis-ci.com/DecideIO-Cabina/decide-io-telegram)
 Bot de Telegram para votar en [DecideIO](https://github.com/EGCETSII/decide)
 
 ## Cómo trabajar en el proyecto
