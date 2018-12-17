@@ -1,6 +1,9 @@
 sudo: required
 language: java
-jdk: jd8
+jdk: jdk8
+
+install:
+- ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 script:
-- mvn test
+- ./mvnw test
