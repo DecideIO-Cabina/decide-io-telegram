@@ -12,8 +12,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import egc.decide.io.cabinatelegram.bot.actions.DecideBotException;
 import egc.decide.io.cabinatelegram.bot.actions.StartAction;
+import egc.decide.io.cabinatelegram.bot.actions.LoginAction;
 import egc.decide.io.cabinatelegram.session.SessionService;
-import egc.decide.io.cabinatelegram.session.model.State;
+import egc.decide.io.cabinatelegram.session.model.BotState;
 import egc.decide.io.cabinatelegram.session.model.UserSession;
 import lombok.SneakyThrows;
 
@@ -26,6 +27,9 @@ public class DecideIOBot extends TelegramLongPollingBot {
 
 	@Autowired
 	StartAction startAction;
+	
+	@Autowired
+	LoginAction loginAction;
 
 	private static final Log log = LogFactory.getLog(DecideIOBot.class);
 	
@@ -60,10 +64,15 @@ public class DecideIOBot extends TelegramLongPollingBot {
 
 		switch (userSession.state()) {
 
-		case State.ANONYMOUS:
+		case BotState.ANONYMOUS:
 			result = startAction.act(update, userSession);
 			break;
+		case BotState.WAITING_FOR_USERNAME:
+		case BotState.WAITING_FOR_PASSWORD:
+			result = loginAction.act(update, userSession);
+			break;
 		default:
+			userSession.state(BotState.ANONYMOUS);
 			throw new DecideBotException("Lo siento, no te he entendido. Prueba con /start");
 		}
 		
