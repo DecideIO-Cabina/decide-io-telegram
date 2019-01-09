@@ -16,7 +16,6 @@ import egc.decide.io.cabinatelegram.bot.actions.LoginAction;
 import egc.decide.io.cabinatelegram.session.SessionService;
 import egc.decide.io.cabinatelegram.session.model.BotState;
 import egc.decide.io.cabinatelegram.session.model.UserSession;
-import lombok.SneakyThrows;
 
 
 @Component
@@ -34,7 +33,6 @@ public class DecideIOBot extends TelegramLongPollingBot {
 	private static final Log log = LogFactory.getLog(DecideIOBot.class);
 	
 	@Override
-	@SneakyThrows
 	public void onUpdateReceived(Update update) {
 		log.debug("Recibido mensaje de " + update.getMessage().getFrom().getFirstName() + " ("
 				+ update.getMessage().getFrom().getUserName() + ")");
