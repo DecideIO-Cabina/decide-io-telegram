@@ -4,6 +4,7 @@ public class UserSession {
 	
 	Integer telegramUserId;
 	String decideToken;
+	int state = State.ANONYMOUS;
 	
 	public UserSession(Integer telegramUserId) {
 		this.setTelegramUserId(telegramUserId);
@@ -20,6 +21,12 @@ public class UserSession {
 	}
 	public void setDecideToken(String decideToken) {
 		this.decideToken = decideToken;
+	}
+	public int state() {
+		return state;
+	}
+	public void state(int state) {
+		this.state = state;
 	}	
 
 }
