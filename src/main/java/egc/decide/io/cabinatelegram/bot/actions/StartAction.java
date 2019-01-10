@@ -24,13 +24,13 @@ public class StartAction implements DecideBotAction {
 		case "Iniciar sesión":
 			return login(update, userSession);
 		case "Ayuda":
-			throw new DecideBotException("Lo sentimos, esta acción no está implementada aún");
+			throw new DecideBotException("Lo siento, esta acción no está implementada aún");
 		default:
 			return firstTimeMenu(update);
 		}
 	}
 
-	private BotApiMethod<?> firstTimeMenu(Update update) {
+	public BotApiMethod<?> firstTimeMenu(Update update) {
 		ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup();
 		keyboard.setOneTimeKeyboard(true);
 		keyboard.setResizeKeyboard(true);

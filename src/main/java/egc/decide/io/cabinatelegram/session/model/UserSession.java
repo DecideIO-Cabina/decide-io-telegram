@@ -1,11 +1,13 @@
 package egc.decide.io.cabinatelegram.session.model;
 
+import egc.decide.io.cabinatelegram.rest.model.DecideUser;
+
 public class UserSession {
 	
 	Integer telegramUserId;
 	String decideToken;
 	int state = BotState.ANONYMOUS;
-	String decideUsername;
+	DecideUser decideUser;
 	
 	public UserSession(Integer telegramUserId) {
 		this.setTelegramUserId(telegramUserId);
@@ -35,12 +37,12 @@ public class UserSession {
 		this.state = state;
 	}
 	
-	public String getDecideUsername() {
-		return decideUsername;
+	public DecideUser getDecideUser() {
+		return decideUser;
 	}
 	
-	public void setDecideUsername(String decideUsername) {
-		this.decideUsername = decideUsername;
+	public void setDecideUser(DecideUser decideUser) {
+		this.decideUser = decideUser;
 	}	
 
 }
