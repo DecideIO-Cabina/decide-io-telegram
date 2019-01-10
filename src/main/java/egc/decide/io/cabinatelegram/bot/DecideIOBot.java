@@ -47,7 +47,10 @@ public class DecideIOBot extends TelegramLongPollingBot {
 			} catch (DecideBotException e) {
 				try {
 					execute(new SendMessage().setChatId(update.getMessage().getChatId())
-							.setText(e.getMessage()));
+							.setText(e.getMessage()));					
+					
+					execute(new SendMessage().setChatId(update.getMessage().getChatId())
+							.setText("Prueba con /start"));
 				} catch (TelegramApiException e1) {
 					e1.printStackTrace();
 				}
@@ -69,9 +72,12 @@ public class DecideIOBot extends TelegramLongPollingBot {
 		case BotState.WAITING_FOR_PASSWORD:
 			result = loginAction.act(update, userSession);
 			break;
+		case BotState.MAIN_MENU:
+			userSession.state(BotState.ANONYMOUS);
+			throw new DecideBotException("Lo siento, esta acción no está implementada aún");
 		default:
 			userSession.state(BotState.ANONYMOUS);
-			throw new DecideBotException("Lo siento, no te he entendido. Prueba con /start");
+			throw new DecideBotException("Lo siento, no te he entendido");
 		}
 		
 		return result;
