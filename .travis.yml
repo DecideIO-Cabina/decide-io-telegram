@@ -1,9 +1,17 @@
 sudo: required
 language: java
 jdk: oraclejdk8
-
 install:
 - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-
 script:
 - mvn test
+- mvn clean verify
+deploy:
+  skip_cleanup: true
+  provider: heroku
+  api_key:
+    secure: Y4eeRHNkYEWudCmBDJGwGCVtFepoxdxady2DHxolI5lBSOq94wPU0cKA0LQsLM6FY0bZuwZ/8l69C6GRYje8dxHs1ZM2t9U6Rh/VcEI6UFnB95DBUV64jMsN2tvhfqwyVPV/5fMrj/zRN+Z+8ZU4bUFy2PgZIMmcZX2l8GHpLZK+36hVVF8lEQQTvM8B/4M+AImQ3cH40f68B7AYNy4ovyz6MNpt3ZvG6mlXW15/DHJNuSSUY7bvCb+RiRYXPIDIVR7AA1Jkyq4R7TE/dHj3fzAaZuSojJzSk61ScKRZ95/n4kv70EeGKXz5BVMYXqVfbPd6ZXNAlUQoyqrQ3Y5Liii3RBt6C6j05l8UHKsyLnuAI3mCHSMoT5o7+5nwd3Rq0iRbry12fzZLPTyAiWbiqVinhyvn7Yrz9C0Og1SziHZPAT+lLkQqt+LlH11nSE4cbfrgFDBioGpYWPmUjcicVPUY6pbDXr6ZxCfKJwO5zFSQu5g/MXXxF6zeGlp1Peh4eRwHqIAwlrsaXxJMoLoEL2fIgugJqM/dHySjvdsg5E4MTixOEjPBwQ2mWJPcp70p4i38Y+D2wLJ2pACshSANP2zRLXuQzkdS9+TAbybjZxnPT8Q8LnKXqMaUTfB6iPgEIW2/M0f/lFH+GvS2ZQiT9z5URLVWVoGB5Bc1jr3uQMQ=
+  app:
+    feature_deploy_heroku_travis: decideio-cabina-telegram
+  on:
+    repo: DecideIO-Cabina/decide-io-telegram/
