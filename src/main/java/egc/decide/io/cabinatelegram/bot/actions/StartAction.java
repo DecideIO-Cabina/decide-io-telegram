@@ -41,7 +41,7 @@ public class StartAction implements DecideBotAction {
 		
 		return new SendMessage().setChatId(update.getMessage().getChatId())
 				.setReplyMarkup(keyboard)
-				.setText("Bienvenido a la cabina de votación de Telegram para Decide");
+				.setText("Bienvenido a la cabina de votación de Telegram para Decide-Defensa");
 	}
 	
 	private BotApiMethod<?> login(Update update, UserSession userSession) {
