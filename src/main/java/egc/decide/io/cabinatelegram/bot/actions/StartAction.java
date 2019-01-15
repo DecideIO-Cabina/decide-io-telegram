@@ -30,7 +30,7 @@ public class StartAction implements DecideBotAction {
 		}
 	}
 
-	public BotApiMethod<?> firstTimeMenu(Update update) {
+	private BotApiMethod<?> firstTimeMenu(Update update) {
 		ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup();
 		keyboard.setOneTimeKeyboard(true);
 		keyboard.setResizeKeyboard(true);

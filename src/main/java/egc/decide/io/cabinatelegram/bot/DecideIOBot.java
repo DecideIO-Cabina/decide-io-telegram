@@ -11,8 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import egc.decide.io.cabinatelegram.bot.actions.DecideBotException;
-import egc.decide.io.cabinatelegram.bot.actions.StartAction;
 import egc.decide.io.cabinatelegram.bot.actions.LoginAction;
+import egc.decide.io.cabinatelegram.bot.actions.MainMenuAction;
+import egc.decide.io.cabinatelegram.bot.actions.StartAction;
 import egc.decide.io.cabinatelegram.session.SessionService;
 import egc.decide.io.cabinatelegram.session.model.BotState;
 import egc.decide.io.cabinatelegram.session.model.UserSession;
@@ -29,6 +30,9 @@ public class DecideIOBot extends TelegramLongPollingBot {
 	
 	@Autowired
 	LoginAction loginAction;
+	
+	@Autowired
+	MainMenuAction mainMenuAction;
 
 	private static final Log log = LogFactory.getLog(DecideIOBot.class);
 	
@@ -73,8 +77,8 @@ public class DecideIOBot extends TelegramLongPollingBot {
 			result = loginAction.act(update, userSession);
 			break;
 		case BotState.MAIN_MENU:
-			userSession.state(BotState.ANONYMOUS);
-			throw new DecideBotException("Lo siento, esta acción no está implementada aún");
+			result = mainMenuAction.act(update, userSession);
+			break;
 		default:
 			userSession.state(BotState.ANONYMOUS);
 			throw new DecideBotException("Lo siento, no te he entendido");
