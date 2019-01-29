@@ -54,5 +54,13 @@ public class UserSession {
 	public void setActualVoting(Voting voting) {
 		this.actualVoting = voting;
 	}
+	
+	public void clear() {
+		this.decideToken = null;
+		this.decideUser = null;
+		this.state = BotState.ANONYMOUS;
+		this.telegramUserId = null;
+
+	}
 
 }
