@@ -19,6 +19,9 @@ public class MainMenuAction implements DecideBotAction {
 
 	@Autowired
 	VoteAction voteAction;
+	
+	@Autowired
+	StartAction startAction;
 
 	@Override
 	public BotApiMethod<?> act(Update update, UserSession userSession) throws DecideBotException {
@@ -29,7 +32,8 @@ public class MainMenuAction implements DecideBotAction {
 		case "Votar por id":
 			return voteAction.act(update, userSession);
 		case "Cerrar sesión":
-			throw new DecideBotException("Lo siento, esta acción no está implementada aún");
+			userSession.clear();
+			return startAction.act(update, userSession);
 		default:
 			return mainMenu(update);
 
