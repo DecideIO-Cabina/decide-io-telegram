@@ -11,27 +11,34 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import egc.decide.io.cabinatelegram.bot.actions.DecideBotException;
-import egc.decide.io.cabinatelegram.bot.actions.StartAction;
 import egc.decide.io.cabinatelegram.bot.actions.LoginAction;
+import egc.decide.io.cabinatelegram.bot.actions.MainMenuAction;
+import egc.decide.io.cabinatelegram.bot.actions.StartAction;
+import egc.decide.io.cabinatelegram.bot.actions.VoteAction;
 import egc.decide.io.cabinatelegram.session.SessionService;
 import egc.decide.io.cabinatelegram.session.model.BotState;
 import egc.decide.io.cabinatelegram.session.model.UserSession;
 
-
 @Component
 public class DecideIOBot extends TelegramLongPollingBot {
-	
+
 	@Autowired
 	SessionService sessionService;
 
 	@Autowired
 	StartAction startAction;
-	
+
 	@Autowired
 	LoginAction loginAction;
 
+	@Autowired
+	MainMenuAction mainMenuAction;
+
+	@Autowired
+	VoteAction voteAction;
+
 	private static final Log log = LogFactory.getLog(DecideIOBot.class);
-	
+
 	@Override
 	public void onUpdateReceived(Update update) {
 		log.debug("Recibido mensaje de " + update.getMessage().getFrom().getFirstName() + " ("
@@ -46,11 +53,9 @@ public class DecideIOBot extends TelegramLongPollingBot {
 				log.error("Se ha producido un error respondiendo a " + update.getMessage().getText(), e);
 			} catch (DecideBotException e) {
 				try {
-					execute(new SendMessage().setChatId(update.getMessage().getChatId())
-							.setText(e.getMessage()));					
-					
-					execute(new SendMessage().setChatId(update.getMessage().getChatId())
-							.setText("Prueba con /start"));
+					execute(new SendMessage().setChatId(update.getMessage().getChatId()).setText(e.getMessage()));
+
+					execute(new SendMessage().setChatId(update.getMessage().getChatId()).setText("Prueba con /start"));
 				} catch (TelegramApiException e1) {
 					e1.printStackTrace();
 				}
@@ -59,7 +64,7 @@ public class DecideIOBot extends TelegramLongPollingBot {
 		}
 	}
 
-	private BotApiMethod<?> act(Update update) throws DecideBotException {
+	public BotApiMethod<?> act(Update update) throws DecideBotException {
 		BotApiMethod<?> result = null;
 		UserSession userSession = sessionService.get(update.getMessage().getFrom().getId());
 
@@ -73,13 +78,17 @@ public class DecideIOBot extends TelegramLongPollingBot {
 			result = loginAction.act(update, userSession);
 			break;
 		case BotState.MAIN_MENU:
-			userSession.state(BotState.ANONYMOUS);
-			throw new DecideBotException("Lo siento, esta acción no está implementada aún");
+			result = mainMenuAction.act(update, userSession);
+			break;
+		case BotState.WAITING_FOR_VOTINGID:
+		case BotState.VOTING:
+			result = voteAction.act(update, userSession);
+			break;
 		default:
 			userSession.state(BotState.ANONYMOUS);
 			throw new DecideBotException("Lo siento, no te he entendido");
 		}
-		
+
 		return result;
 	}
 
