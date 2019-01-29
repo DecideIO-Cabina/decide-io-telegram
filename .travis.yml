@@ -15,5 +15,4 @@ deploy:
     feature_deploy_heroku_travis: decidio-cabina-telegram
   on:
     branch: master
-    repo: DecideIO-Cabina/decide-io-telegram/
     
