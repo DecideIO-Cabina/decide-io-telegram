@@ -78,6 +78,7 @@ public class VoteAction implements DecideBotAction {
 						+ question.getDesc() + "\n" + "Seleccione el número de la opción elegida:\n" + opciones);
 	}
 
+
 	private BotApiMethod<?> vote(Update update, UserSession userSession, Integer optionNumber)
 			throws DecideBotException {
 		userSession.state(BotState.MAIN_MENU);
@@ -95,6 +96,7 @@ public class VoteAction implements DecideBotAction {
 			else
 				throw new DecideBotException("Lo siento, no he podido conectar con Decide");
 		}
+
 	}
 
 }
