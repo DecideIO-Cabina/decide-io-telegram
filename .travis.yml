@@ -1,18 +1,13 @@
 sudo: required
 language: java
 jdk: oraclejdk8
+
 install:
-- mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script:
-- mvn test
-- mvn clean verify
+   - mvn test
 deploy:
-  skip_cleanup: true
-  provider: heroku
-  api_key:
-    secure: T0ncDG4BE9hG03dKyYkHqnFaJfGj8FqgR/dl4k/nbD/LTkqS0I4jJHAfYcpvyezzDNjniRuyEyioAjQ4YZTL3x8EAKcFWgMeCWAweriNzg2TIy2Z1f23iwcArXfyqozEapcvr0GPl/UXyi9IimY894G2cfkfg205pU4j/YeHpkvBvBSDlhOxhcLY79pGCTnkOkUBbgbNi5cmzUxkdF13caRp//OFw7vasR4QP4gtPr6xR97vEeL8uoorJYAAwTL1aHY/idtwujK6ISr9YPi63EXT8PNFHRskzbvJBtF7QkSpMX1kyBgyyUrBVlaCZD9D1M2Yd+ESLoFxeQr+kbvLgXFrOW65k4UGKh6XZcZ8ksfIkJOBMz/EgPFLgbmCwHNLBuxsrWbe76CDDegbpVYLPXlMWDOq9kLbx6loQaWcto949/xYAt/LroQM+9BBERQ+ghkFI2B94lwUr1UW902f+l6V0Gd00D6MTFo8aP5uR8YqyLcP3v13CBkzBXJL1Ggm1yjHBASN6XTNeL7Hx2MwwOn+M+YhB1u/QJr3A4nTURN32kFK8xhgs8YM6Cs1thpB04FtERkj0Ck7XlzyyshbAu0I6I7SXtr2ctVsEmlfJnmleGJleGBRXO6HoS7pasEge3T8XASTl9P9XSIoV8k6cxRAzifjgxMLU0sx0+gZGzg=
-  app:
-    feature_deploy_heroku_travis: decidio-cabina-telegram
-  on:
-    branch: master
-    
+   provider: script
+   script: mvn clean verify
+   on:
+      branch: master
