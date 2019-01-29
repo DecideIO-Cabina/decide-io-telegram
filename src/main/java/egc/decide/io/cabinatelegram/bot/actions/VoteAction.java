@@ -6,6 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -79,9 +80,25 @@ public class VoteAction implements DecideBotAction {
 						+ question.getDesc() + "\n" + "Seleccione el número de la opción elegida:\n" + opciones);
 	}
 
-	private BotApiMethod<?> vote(Update update, UserSession userSession, int optionNumber) {
 
-		return null;
+	private BotApiMethod<?> vote(Update update, UserSession userSession, Integer optionNumber)
+			throws DecideBotException {
+		userSession.state(BotState.MAIN_MENU);
+		try {
+			decideVotingClient.vote(optionNumber, userSession.getActualVoting(), userSession.getDecideUser().getId());
+
+			String texto = "Su voto ha sido registrado, gracias por participar en la votación";
+
+			return new SendMessage().setChatId(texto);
+
+		} catch (HttpClientErrorException e) {
+			log.error(e.getMessage());
+			if (e.getRawStatusCode() == 401)
+				throw new DecideBotException("Lo siento, no puede participar en esta votación");
+			else
+				throw new DecideBotException("Lo siento, no he podido conectar con Decide");
+		}
+
 	}
 
 }
