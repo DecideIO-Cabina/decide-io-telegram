@@ -53,6 +53,7 @@ public class DecideAuthenticationClient {
 				.postForObject(decideBaseUrl + "/authentication/getuser/",
 				request, DecideUser.class, new HashMap<String, String>());
 		
+		
 		return result;
 	}
 
