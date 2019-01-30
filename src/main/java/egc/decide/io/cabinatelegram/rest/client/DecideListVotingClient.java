@@ -22,7 +22,7 @@ public class DecideListVotingClient {
 	
 	@Value("${decide.base.url}")
 	String decideBaseUrl;
-	
+	//segun su metodo devuelve una lista con los id de las votaciones, por lo que lo transformo en un array de integers
 	public Integer[] lista(int userID) {
 		
 		Integer[] list = new Arraylist();
