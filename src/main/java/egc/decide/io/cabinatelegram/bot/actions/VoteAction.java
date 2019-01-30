@@ -28,11 +28,14 @@ public class VoteAction implements DecideBotAction {
 
 	@Autowired
 	DecideVotingClient decideVotingClient;
+	
+	@Autowired
+	MainMenuAction mainMenuAction;
 
 	private static final Log log = LogFactory.getLog(VoteAction.class);
 
 	@Override
-	public BotApiMethod<?> act(Update update, UserSession userSession) throws DecideBotException {
+	public BotApiMethod<?>[] act(Update update, UserSession userSession) throws DecideBotException {
 		switch (userSession.state()) {
 
 		case BotState.WAITING_FOR_VOTINGID:
@@ -42,14 +45,14 @@ public class VoteAction implements DecideBotAction {
 				userSession.state(BotState.MAIN_MENU);
 				throw new DecideBotException("Lo siento, el id introducido no es correcto");
 			} else {
-				return this.getVoting(id, update, userSession);
+				return new BotApiMethod<?>[] {getVoting(id, update, userSession)};
 			}
 		case BotState.VOTING:
 			Integer number = Integer.parseInt(update.getMessage().getText());
-			return this.vote(update, userSession, number);
+			return vote(update, userSession, number);
 
 		default:
-			return this.getVotingId(update, userSession);
+			return new BotApiMethod<?>[] {getVotingId(update, userSession)};
 
 		}
 	}
@@ -97,16 +100,19 @@ public class VoteAction implements DecideBotAction {
 						+ question.getDesc() + "\n" + "Seleccione el número de la opción elegida:\n" + opciones);
 	}
 
-	private BotApiMethod<?> vote(Update update, UserSession userSession, Integer optionNumber)
+	private BotApiMethod<?>[] vote(Update update, UserSession userSession, Integer optionNumber)
 			throws DecideBotException {
 		userSession.state(BotState.MAIN_MENU);
 		try {
 			decideVotingClient.vote(optionNumber, userSession.getActualVoting(), userSession.getDecideUser().getId(), userSession.getDecideToken());
 
+			userSession.state(BotState.MAIN_MENU);
+			
 			String texto = "Su voto ha sido registrado, gracias por participar en la votación";
 
-			return new SendMessage().setChatId(update.getMessage().getChatId())
-					.setText(texto);
+			return new BotApiMethod<?>[] {
+				new SendMessage().setChatId(update.getMessage().getChatId()).setText(texto),
+				mainMenuAction.act(update, userSession)[0]};
 		} catch (HttpClientErrorException e) {
 			log.error(e.getMessage());
 			if (e.getRawStatusCode() == 401)

@@ -57,7 +57,8 @@ public class DecideIOBot extends TelegramLongPollingBot {
 		if (update.hasMessage() && update.getMessage().hasText()) {
 
 			try {
-				execute(act(update));
+				for (BotApiMethod<?> action : act(update))
+				execute(action);
 			} catch (TelegramApiException e) {
 				log.error("Se ha producido un error respondiendo a " + update.getMessage().getText(), e);
 			} catch (DecideBotException e) {
@@ -73,7 +74,7 @@ public class DecideIOBot extends TelegramLongPollingBot {
 		}
 	}
 
-	public BotApiMethod<?> act(Update update) throws DecideBotException {
+	public BotApiMethod<?>[] act(Update update) throws DecideBotException {
 		BotApiMethod<?>[] result = null;
 		UserSession userSession = sessionService.get(update.getMessage().getFrom().getId());
 

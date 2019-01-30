@@ -24,7 +24,7 @@ public class MainMenuAction implements DecideBotAction {
 	StartAction startAction;
 
 	@Override
-	public BotApiMethod<?> act(Update update, UserSession userSession) throws DecideBotException {
+	public BotApiMethod<?>[] act(Update update, UserSession userSession) throws DecideBotException {
 		switch (update.getMessage().getText()) {
 
 		case "Ver votaciones públicas":
@@ -35,7 +35,7 @@ public class MainMenuAction implements DecideBotAction {
 			userSession.clear();
 			return startAction.act(update, userSession);
 		default:
-			return mainMenu(update);
+			return new BotApiMethod<?>[] {mainMenu(update)};
 
 		}
 	}
