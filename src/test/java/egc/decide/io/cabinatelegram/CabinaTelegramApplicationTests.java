@@ -13,8 +13,8 @@ import egc.decide.io.cabinatelegram.bot.actions.DecideBotException;
 @SpringBootTest
 public class CabinaTelegramApplicationTests extends BaseTest {
 	
-	static final String testUsername = "admin";
-	static final String testPassword = "iopostproc";
+	static final String testUsername = "votante";
+	static final String testPassword = "contraseña";
 	
 	static {
 		ApiContextInitializer.init();
@@ -33,7 +33,7 @@ public class CabinaTelegramApplicationTests extends BaseTest {
 		
 		expectContainsAndMarkup(act(testUsername), "Introduce tu contraseña");
 		
-		expectContains(act(testPassword), "admin");
+		expectContains(act(testPassword), "Votante");
 	}
 	
 	@Test(expected=DecideBotException.class)

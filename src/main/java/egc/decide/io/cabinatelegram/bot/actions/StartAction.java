@@ -19,14 +19,14 @@ import egc.decide.io.cabinatelegram.session.model.UserSession;
 public class StartAction implements DecideBotAction {
 
 	@Override
-	public BotApiMethod<?> act(Update update, UserSession userSession) throws DecideBotException {
+	public BotApiMethod<?>[] act(Update update, UserSession userSession) throws DecideBotException {
 		switch(update.getMessage().getText()) {
 		case "Iniciar sesión":
-			return login(update, userSession);
+			return new BotApiMethod<?>[] {login(update, userSession)};
 		case "Ayuda":
 			throw new DecideBotException("Lo siento, esta acción no está implementada aún");
 		default:
-			return firstTimeMenu(update);
+			return new BotApiMethod<?>[] {firstTimeMenu(update)};
 		}
 	}
 

@@ -3,6 +3,8 @@ package egc.decide.io.cabinatelegram.bot;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -19,6 +21,7 @@ import egc.decide.io.cabinatelegram.session.SessionService;
 import egc.decide.io.cabinatelegram.session.model.BotState;
 import egc.decide.io.cabinatelegram.session.model.UserSession;
 
+@PropertySource(ignoreResourceNotFound = true, value = "classpath:application.properties")
 @Component
 public class DecideIOBot extends TelegramLongPollingBot {
 
@@ -36,6 +39,12 @@ public class DecideIOBot extends TelegramLongPollingBot {
 
 	@Autowired
 	VoteAction voteAction;
+	
+	@Value("${bot.name}")
+	String botName;
+	
+	@Value("${bot.token}")
+	String botToken;
 
 	private static final Log log = LogFactory.getLog(DecideIOBot.class);
 
@@ -48,7 +57,8 @@ public class DecideIOBot extends TelegramLongPollingBot {
 		if (update.hasMessage() && update.getMessage().hasText()) {
 
 			try {
-				execute(act(update));
+				for (BotApiMethod<?> action : act(update))
+				execute(action);
 			} catch (TelegramApiException e) {
 				log.error("Se ha producido un error respondiendo a " + update.getMessage().getText(), e);
 			} catch (DecideBotException e) {
@@ -64,8 +74,8 @@ public class DecideIOBot extends TelegramLongPollingBot {
 		}
 	}
 
-	public BotApiMethod<?> act(Update update) throws DecideBotException {
-		BotApiMethod<?> result = null;
+	public BotApiMethod<?>[] act(Update update) throws DecideBotException {
+		BotApiMethod<?>[] result = null;
 		UserSession userSession = sessionService.get(update.getMessage().getFrom().getId());
 
 		switch (userSession.state()) {
@@ -94,12 +104,12 @@ public class DecideIOBot extends TelegramLongPollingBot {
 
 	@Override
 	public String getBotUsername() {
-		return "DecideIOBot";
+		return botName;
 	}
 
 	@Override
 	public String getBotToken() {
-		return "632133854:AAFtn9VWO7-2YtCC3PxWijvsstdgbh6Uke0";
+		return botToken;
 	}
 
 }

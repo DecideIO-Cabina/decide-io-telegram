@@ -51,7 +51,7 @@ public class BaseTest {
 	BotApiMethod<?> act(String msg) throws IllegalAccessException, DecideBotException {
 		FieldUtils.writeField(message, "text", msg, true);
 		
-		return bot.act(update);			
+		return bot.act(update)[0];			
 	}
 	
 	void expectContains(BotApiMethod<?> response, String expected) {

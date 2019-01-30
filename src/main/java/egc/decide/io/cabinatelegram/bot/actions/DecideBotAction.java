@@ -7,6 +7,6 @@ import egc.decide.io.cabinatelegram.session.model.UserSession;
 
 public interface DecideBotAction {
 	
-	BotApiMethod<?> act(Update update, UserSession userSession) throws DecideBotException;
+	BotApiMethod<?>[] act(Update update, UserSession userSession) throws DecideBotException;
 
 }
