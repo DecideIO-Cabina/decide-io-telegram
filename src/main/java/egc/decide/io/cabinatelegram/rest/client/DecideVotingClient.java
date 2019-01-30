@@ -28,6 +28,8 @@ public class DecideVotingClient {
 	@Value("${decide.base.url}")
 	String decideBaseUrl;
 	
+	//Metodo recibir el id de los votings desde de una persona puede votar desde censo
+	
 	public Collection<Voting> getVotings(Integer userId) {
 		List<Voting> votings = new ArrayList<>();
 		
