@@ -87,7 +87,7 @@ public class VoteAction implements DecideBotAction {
 			throws DecideBotException {
 		userSession.state(BotState.MAIN_MENU);
 		try {
-			decideVotingClient.vote(optionNumber, userSession.getActualVoting(), userSession.getDecideUser().getId());
+			decideVotingClient.vote(optionNumber, userSession.getActualVoting(), userSession.getDecideUser().getId(), userSession.getDecideToken());
 
 			String texto = "Su voto ha sido registrado, gracias por participar en la votación";
 

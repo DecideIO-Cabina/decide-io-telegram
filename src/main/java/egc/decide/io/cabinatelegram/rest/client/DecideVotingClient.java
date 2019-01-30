@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -33,7 +35,7 @@ public class DecideVotingClient {
 
 	}
 
-	public void vote(Integer vote, Voting voting, Integer userId) {
+	public void vote(Integer vote, Voting voting, Integer userId, String token) {
 
 		MultiValueMap<String, Integer> body = new LinkedMultiValueMap<String, Integer>();
 		body.add("voting_id", voting.getId());
@@ -47,10 +49,12 @@ public class DecideVotingClient {
 
 		}
 
-		// TODO revisar el LoginResponse.class, la API de postprocesado no deja claro
-		// que devuelve la llamada
-		restTemplate.postForObject(decideBaseUrl + "/store/", body, LoginResponse.class, new HashMap<String, String>());
-
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", "Token " + token);
+		
+		HttpEntity<MultiValueMap<String, Integer>> request = new HttpEntity<>(body, headers);
+		
+		restTemplate.postForObject(decideBaseUrl + "/store/", request, LoginResponse.class, new HashMap<String, String>());
 	}
 
 }
