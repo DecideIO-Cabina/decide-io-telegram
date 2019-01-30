@@ -26,13 +26,13 @@ public class LoginAction implements DecideBotAction {
 	DecideAuthenticationClient decideAuthenticationClient;
 
 	@Override
-	public BotApiMethod<?> act(Update update, UserSession userSession) throws DecideBotException {
+	public BotApiMethod<?>[] act(Update update, UserSession userSession) throws DecideBotException {
 		switch (userSession.state()) {
 		
 		case BotState.WAITING_FOR_USERNAME:
-			return getUsername(update, userSession);
+			return new BotApiMethod<?>[] {getUsername(update, userSession)};
 		case BotState.WAITING_FOR_PASSWORD:
-			return getPassword(update, userSession);
+			return new BotApiMethod<?>[] {getPassword(update, userSession)};
 		default:
 			throw new DecideBotException();
 		

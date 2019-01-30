@@ -1,5 +1,6 @@
 package egc.decide.io.cabinatelegram.rest.client;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,13 +8,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import egc.decide.io.cabinatelegram.rest.model.Cipher;
 import egc.decide.io.cabinatelegram.rest.model.LoginResponse;
-import egc.decide.io.cabinatelegram.rest.model.Option;
 import egc.decide.io.cabinatelegram.rest.model.Voting;
+import egc.decide.io.cabinatelegram.rest.model.VotingStore;
 
 @Service
 public class DecideVotingClient {
@@ -36,23 +37,17 @@ public class DecideVotingClient {
 	}
 
 	public void vote(Integer vote, Voting voting, Integer userId, String token) {
-
-		MultiValueMap<String, Integer> body = new LinkedMultiValueMap<String, Integer>();
-		body.add("voting_id", voting.getId());
-		body.add("voter_id", userId);
-		for (Option o : voting.getQuestion().getOptions()) {
-			if (o.getNumber().equals(vote)) {
-				body.add(o.getOption(), 1);
-			} else {
-				body.add(o.getOption(), 0);
-			}
-
-		}
+		
+		BigInteger[] v = Cipher.encrypt(new BigInteger(voting.getPubKey().getP()), new BigInteger(voting.getPubKey().getG()),
+				new BigInteger(voting.getPubKey().getY()), BigInteger.valueOf(vote));
+		
+		
+		VotingStore votingStore = new VotingStore(v[0], v[1], voting.getId(), userId, token);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "Token " + token);
 		
-		HttpEntity<MultiValueMap<String, Integer>> request = new HttpEntity<>(body, headers);
+		HttpEntity<VotingStore> request = new HttpEntity<>(votingStore, headers);
 		
 		restTemplate.postForObject(decideBaseUrl + "/store/", request, LoginResponse.class, new HashMap<String, String>());
 	}

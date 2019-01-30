@@ -1,6 +1,7 @@
 package egc.decide.io.cabinatelegram.bot.actions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,6 +12,10 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+
+import egc.decide.io.cabinatelegram.bot.util.BotUtils;
 import egc.decide.io.cabinatelegram.rest.client.DecideVotingClient;
 import egc.decide.io.cabinatelegram.rest.model.Option;
 import egc.decide.io.cabinatelegram.rest.model.Question;
@@ -71,14 +76,23 @@ public class VoteAction implements DecideBotAction {
 		Question question = voting[0].getQuestion();
 
 		ArrayList<Option> options = new ArrayList<Option>(question.getOptions());
+		
+		ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup();
+		keyboard.setOneTimeKeyboard(true);
+		keyboard.setResizeKeyboard(true);
+
+		List<KeyboardRow> rows = new ArrayList<>();
 
 		String opciones = "";
 		for (Option o : options) {
-
 			opciones = opciones + o.getNumber() + ". " + o.getOption() + "\n";
+			rows.add(BotUtils.createKeyboardRow(o.getNumber().toString()));
 		}
+		
+		
+		keyboard.setKeyboard(rows);
 
-		return new SendMessage().setChatId(update.getMessage().getChatId()).setReplyMarkup(new ForceReplyKeyboard())
+		return new SendMessage().setChatId(update.getMessage().getChatId()).setReplyMarkup(keyboard)
 				.setText("----------" + voting[0].getName() + "----------\n" + voting[0].getDesc() + "\n"
 						+ question.getDesc() + "\n" + "Seleccione el número de la opción elegida:\n" + opciones);
 	}
@@ -91,8 +105,8 @@ public class VoteAction implements DecideBotAction {
 
 			String texto = "Su voto ha sido registrado, gracias por participar en la votación";
 
-			return new SendMessage().setChatId(texto);
-
+			return new SendMessage().setChatId(update.getMessage().getChatId())
+					.setText(texto);
 		} catch (HttpClientErrorException e) {
 			log.error(e.getMessage());
 			if (e.getRawStatusCode() == 401)

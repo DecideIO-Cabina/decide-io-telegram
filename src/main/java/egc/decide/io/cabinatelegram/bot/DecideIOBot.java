@@ -74,7 +74,7 @@ public class DecideIOBot extends TelegramLongPollingBot {
 	}
 
 	public BotApiMethod<?> act(Update update) throws DecideBotException {
-		BotApiMethod<?> result = null;
+		BotApiMethod<?>[] result = null;
 		UserSession userSession = sessionService.get(update.getMessage().getFrom().getId());
 
 		switch (userSession.state()) {
