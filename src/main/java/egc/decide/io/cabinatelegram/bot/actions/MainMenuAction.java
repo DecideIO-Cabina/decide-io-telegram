@@ -22,13 +22,18 @@ public class MainMenuAction implements DecideBotAction {
 	
 	@Autowired
 	StartAction startAction;
+	
+	@Autowired
+	VotingListAction votingListAction;
 
 	@Override
 	public BotApiMethod<?>[] act(Update update, UserSession userSession) throws DecideBotException {
 		switch (update.getMessage().getText()) {
 
 		case "Ver votaciones públicas":
-		case "Ver mis votaciones":
+			throw new DecideBotException("¡Lo sentimos, este método aún no está implementado en la API de Decide!");
+		case "Ver votaciones en las que puedo participar":
+			return votingListAction.act(update, userSession);
 		case "Votar por id":
 			return voteAction.act(update, userSession);
 		case "Cerrar sesión":
@@ -47,7 +52,7 @@ public class MainMenuAction implements DecideBotAction {
 
 		List<KeyboardRow> rows = new ArrayList<>();
 		rows.add(BotUtils.createKeyboardRow("Ver votaciones públicas"));
-		rows.add(BotUtils.createKeyboardRow("Ver mis votaciones"));
+		rows.add(BotUtils.createKeyboardRow("Ver votaciones en las que puedo participar"));
 		rows.add(BotUtils.createKeyboardRow("Votar por id"));
 		rows.add(BotUtils.createKeyboardRow("Cerrar sesión"));
 		keyboard.setKeyboard(rows);

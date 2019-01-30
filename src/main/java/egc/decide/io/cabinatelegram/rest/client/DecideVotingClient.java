@@ -1,19 +1,22 @@
 package egc.decide.io.cabinatelegram.rest.client;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import egc.decide.io.cabinatelegram.rest.model.Cipher;
 import egc.decide.io.cabinatelegram.rest.model.LoginResponse;
 import egc.decide.io.cabinatelegram.rest.model.Voting;
+import egc.decide.io.cabinatelegram.rest.model.VotingList;
 import egc.decide.io.cabinatelegram.rest.model.VotingStore;
 
 @Service
@@ -24,6 +27,19 @@ public class DecideVotingClient {
 
 	@Value("${decide.base.url}")
 	String decideBaseUrl;
+	
+	public Collection<Voting> getVotings(Integer userId) {
+		List<Voting> votings = new ArrayList<>();
+		
+		VotingList votingList = restTemplate.getForObject(decideBaseUrl + "/census/user/?user_id=" + userId, VotingList.class,
+				new HashMap<String, Integer>());
+		
+		for (Integer id : votingList.getListOfVotingsId()) {
+			votings.add(getVoting(id)[0]);
+		}
+		
+		return votings;
+	}
 
 	public Voting[] getVoting(int id) {
 
