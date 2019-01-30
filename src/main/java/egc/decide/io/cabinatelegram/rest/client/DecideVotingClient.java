@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 
 import egc.decide.io.cabinatelegram.rest.model.LoginResponse;
 import egc.decide.io.cabinatelegram.rest.model.Option;
-
 import egc.decide.io.cabinatelegram.rest.model.Voting;
 
 @Service
@@ -26,10 +25,9 @@ public class DecideVotingClient {
 	public Voting[] getVoting(int id) {
 
 		Voting[] voting = null;
-		HashMap<String, Integer> votingId = new HashMap<String, Integer>();
-		votingId.put("id", 1);
 
-		voting = restTemplate.getForObject(decideBaseUrl + "/voting/", Voting[].class, votingId);
+		voting = restTemplate.getForObject(decideBaseUrl + "/voting/?id=" + id, Voting[].class,
+				new HashMap<String, Integer>());
 
 		return voting;
 

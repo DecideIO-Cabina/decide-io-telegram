@@ -16,7 +16,7 @@ public class Voting {
 	@JsonProperty("end_date")
 	Date endDate;
 	@JsonProperty("pub_key")
-	String pubKey;
+	Key pubKey;
 	List<Auth> auths;
 	String tally;
 	String postproc;
@@ -69,11 +69,11 @@ public class Voting {
 		this.endDate = endDate;
 	}
 
-	public String getPubKey() {
+	public Key getPubKey() {
 		return pubKey;
 	}
 
-	public void setPubKey(String pubKey) {
+	public void setPubKey(Key pubKey) {
 		this.pubKey = pubKey;
 	}
 

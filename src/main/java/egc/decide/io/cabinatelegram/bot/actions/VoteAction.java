@@ -56,13 +56,16 @@ public class VoteAction implements DecideBotAction {
 				.setText("Introduce el id de la votación:");
 	}
 
-
-	private BotApiMethod<?> getVoting(int votingId, Update update, UserSession userSession) {
+	private BotApiMethod<?> getVoting(int votingId, Update update, UserSession userSession) throws DecideBotException {
 
 		userSession.state(BotState.VOTING);
 
 		Voting[] voting = decideVotingClient.getVoting(votingId);
 
+		if (voting.length == 0) {
+			userSession.state(BotState.MAIN_MENU);
+			throw new DecideBotException("Lo siento, esa votación no existe");
+		}
 		userSession.setActualVoting(voting[0]);
 
 		Question question = voting[0].getQuestion();
@@ -79,7 +82,6 @@ public class VoteAction implements DecideBotAction {
 				.setText("----------" + voting[0].getName() + "----------\n" + voting[0].getDesc() + "\n"
 						+ question.getDesc() + "\n" + "Seleccione el número de la opción elegida:\n" + opciones);
 	}
-
 
 	private BotApiMethod<?> vote(Update update, UserSession userSession, Integer optionNumber)
 			throws DecideBotException {
