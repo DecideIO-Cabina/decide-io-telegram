@@ -24,9 +24,12 @@ public class VotingListAction implements DecideBotAction {
 	@Autowired
 	DecideVotingClient decideVotingClient;
 	
+	//Metodo para reunir los votings
+	
 	@Override
 	public BotApiMethod<?>[] act(Update update, UserSession userSession) throws DecideBotException {
 		Collection<Voting> votings = decideVotingClient.getVotings(userSession.getDecideUser().getId()); 
+		
 		
 		ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup();
 		keyboard.setOneTimeKeyboard(true);
